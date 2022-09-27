@@ -17,15 +17,16 @@ const schema = yup.object({
 }).required();
 
 export default function AddAddress() {
-  const { register, formState: { errors }, handleSubmit, setValue, getValues, watch} = useForm({
+  const { register, formState: { errors }, handleSubmit, setValue, getValues, watch } = useForm({
     resolver: yupResolver(schema)
   });
-  const [status, setStatus] = useState('idle');
+  const [status, setStatus] = useState('');
   const history = useHistory();
-  const updateValue = (field, value) => setValue(field, value, {shouldValidate: true, shouldDirty: true});
+  const updateValue = (field, value) => setValue(field, value, { shouldValidate: true, shouldDirty: true });
   const allField = watch();
 
   const onSubmit = async formData => {
+
     const payload = {
       nama: formData.nama,
       detail: formData.detail,
@@ -36,10 +37,12 @@ export default function AddAddress() {
     }
 
     setStatus('process');
+    console.log("Succes");
+    history.push('/account/address');
     const { data } = await createAddress(payload);
-    if(!data.error) {
+    if (!data) {
       setStatus('success');
-      history.push('/account/address');
+
     }
   }
 
@@ -62,28 +65,28 @@ export default function AddAddress() {
         <Col md={6}>
           <Form.Group className="mb-3" controlId="nama">
             <Form.Label>Nama</Form.Label>
-            <Form.Control 
-              type="text" 
-              placeholder="Masukan nama alamat" 
+            <Form.Control
+              type="text"
+              placeholder="Masukan nama alamat"
               isInvalid={errors.nama}
               {...register('nama')}
             />
             <Form.Control.Feedback type="invalid">
-              { errors.nama?.message }
+              {errors.nama?.message}
             </Form.Control.Feedback>
           </Form.Group>
           <Form.Group className="mb-3" controlId="detail">
             <Form.Label>Detail alamat</Form.Label>
-            <Form.Control 
-              type="text" 
-              placeholder="Masukan detail alamat" 
+            <Form.Control
+              type="text"
+              placeholder="Masukan detail alamat"
               as="textarea"
               isInvalid={errors.nama}
               rows={9}
               {...register('detail')}
             />
             <Form.Control.Feedback type="invalid">
-              { errors.detail?.message }
+              {errors.detail?.message}
             </Form.Control.Feedback>
           </Form.Group>
         </Col>
@@ -97,7 +100,7 @@ export default function AddAddress() {
               location="provinsi"
             />
             <Form.Control.Feedback type="invalid">
-              { errors.provinsi?.message }
+              {errors.provinsi?.message}
             </Form.Control.Feedback>
           </Form.Group>
           <Form.Group className="mb-3" controlId="kabupaten">
@@ -110,7 +113,7 @@ export default function AddAddress() {
               value={getValues()?.kabupaten?.value}
             />
             <Form.Control.Feedback type="invalid">
-              { errors.kabupaten?.message }
+              {errors.kabupaten?.message}
             </Form.Control.Feedback>
           </Form.Group>
           <Form.Group className="mb-3" controlId="kecamatan">
@@ -123,7 +126,7 @@ export default function AddAddress() {
               value={getValues()?.kecamatan?.value}
             />
             <Form.Control.Feedback type="invalid">
-              { errors.kecamatan?.message }
+              {errors.kecamatan?.message}
             </Form.Control.Feedback>
           </Form.Group>
           <Form.Group className="mb-3" controlId="kelurahan">
@@ -136,15 +139,15 @@ export default function AddAddress() {
               value={getValues()?.kelurahan?.value}
             />
             <Form.Control.Feedback type="invalid">
-              { errors.kelurahan?.message }
+              {errors.kelurahan?.message}
             </Form.Control.Feedback>
           </Form.Group>
         </Col>
       </Row>
-      
+
       <div className="d-grid gap-2">
         <Button type="submit" variant="primary" disabled={status === 'process'}>
-          { status === 'process' ? 'Memproses...' : 'Simpan'}
+          {status === 'process' ? 'Memproses...' : 'Simpan'}
         </Button>
       </div>
     </Form>

@@ -2,32 +2,6 @@ const { subject } = require('@casl/ability');
 const { policyFor } = require('../../utils');
 const DeliveryAddress = require('./model');
 
-
-const index = async (req, res, next) => {
-
-  try {
-    let { skip = 0, limit = 10 } = req.query;
-    let count = await DeliveryAddress.find({ user: req.user._id }).countDocuments();
-    let address =
-      await DeliveryAddress
-        .find({ user: req.user._id })
-        .skip(parseInt(skip))
-        .limit(parseInt(limit))
-        .sort('-createdAt');
-
-    return res.json({ data: address, count });
-  } catch (err) {
-    if (err && err.name == 'ValidationError') {
-      return res.json({
-        error: 1,
-        message: err.message,
-        fields: err.errors
-      })
-    }
-
-    next(err)
-  }
-}
 const store = async (req, res, next) => {
   try {
     let payload = req.body;
@@ -106,11 +80,36 @@ const destroy = async (req, res, next) => {
   }
 }
 
+const index = async (req, res, next) => {
+
+  try {
+    let { skip = 0, limit = 10 } = req.query;
+    let count = await DeliveryAddress.find({ user: req.user._id }).countDocuments();
+    let address =
+      await DeliveryAddress
+        .find({ user: req.user._id })
+        .skip(parseInt(skip))
+        .limit(parseInt(limit))
+        .sort('-createdAt');
+
+    return res.json({ data: address, count });
+  } catch (err) {
+    if (err && err.name == 'ValidationError') {
+      return res.json({
+        error: 1,
+        message: err.message,
+        fields: err.errors
+      })
+    }
+
+    next(err)
+  }
+}
 
 
 module.exports = {
-  index,
   store,
   update,
+  index,
   destroy
-}
+};

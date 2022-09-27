@@ -21,13 +21,22 @@ export default function TopBar() {
   }, []);
 
   return (
-    <Navbar bg="primary" variant="dark" expand="lg" fixed="top">
-      <Container>
-        <IndexLinkContainer to="/" exact>
-          <Navbar.Brand><strong>POS</strong></Navbar.Brand>
-        </IndexLinkContainer>
-        <Navbar.Toggle aria-controls="navbarScroll" />
-        <Navbar.Collapse id="navbarScroll">
+
+  <Navbar bg="primary" text="light" variant="dark" expand="lg" fixed="top">
+  <Container>
+    <IndexLinkContainer to="/" exact>
+      <Navbar.Brand><strong>POS</strong></Navbar.Brand>
+    </IndexLinkContainer>
+    <Navbar.Toggle aria-controls="navbarScroll" />
+    <Navbar.Collapse id="navbarScroll">
+    <Form className="d-flex w-100">
+            <InputGroup>
+              <FormControl type="text" placeholder="Cari barang..." onChange={e => dispatch(setKeyword(e.target.value))}/>
+              <Button variant="outline-light">
+                <FontAwesomeIcon icon={solid('magnifying-glass')} />
+              </Button>
+            </InputGroup>
+          </Form>
           <Nav className="me-auto my-2 my-lg-0 mr-3">
             <NavDropdown title={products.category || 'Kategori'} id="navbarScrollingDropdown">
               {
@@ -42,14 +51,6 @@ export default function TopBar() {
               }
             </NavDropdown>
           </Nav>
-          <Form className="d-flex w-75">
-            <InputGroup>
-              <FormControl type="text" placeholder="Cari barang..." onChange={e => dispatch(setKeyword(e.target.value))}/>
-              <Button variant="outline-light">
-                <FontAwesomeIcon icon={solid('magnifying-glass')} />
-              </Button>
-            </InputGroup>
-          </Form>
           <Nav>
             <LinkContainer to="/cart" style={{marginRight: '20px'}}>
               <Nav.Link className="position-relative" title="Keranjang belanja" >
